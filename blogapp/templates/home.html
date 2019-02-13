@@ -1,21 +1,41 @@
 {% extends 'base.html'%}
 
-{% block contents %}<!--이부분이 base.html에서 말한 서로 다른 contents가 들어갈 내용이에요 라고 알려주는 것.-->
+
 <body>
+{% block contents %}<!--이부분이 base.html에서 말한 서로 다른 contents가 들어갈 내용이에요 라고 알려주는 것.-->
 <br>
-    {% for blog in blogs.all %}
+    {% for blog in posts %}<!--하나의 페이지를 대상으로 돌아라-->
         <div class="container">
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">{{blog.title}}</h2>
                     <h6 class="card-subtitle mb-2 text-muted">{{blog.pub_date}}</h6>
                     <p class="card-text">{{blog.summary}}</p>
-                    <a href="{% url 'detail' blog.id %}" class="card-link">...more</a>
+                    <a href="{% url 'detail' blog.id %}" class="card-link">....more</a>
                 </div>
             </div><br>
         </div>
     {% endfor %}
 
-    
+    <!--{#First Previous 3of4 Next Last를 만들어주는 코드 #}-->
+
+    <div class="container">
+    <!--Fist Previous-->
+    {% if posts.has_previous %}<!--만약에 post가 이전페이지가 있따면 아래를 실행-->
+    <a href="?page=1">First</a>
+    <a href="?page={{posts.previous_page_number}}">Previous</a>
+    {%endif%}
+    <!--3 of 4-->
+    <span>{{posts.number}}</span><!--지금내가 보고있는 포스트에 해당하는 페이지번호-->
+    <span>of</span>
+    <span>{{posts.paginator.num_pages}}</span><!--전체페이지수-->
+    <!--Next Last -->
+    {% if posts.has_next %}<!--만약에 다음포스트가 있따면-->
+    <a href="?page={{posts.next_page_number}}">Next</a><!--다음페이지에 링크가걸려져있는것-->
+    <a href="?page={{posts.paginator.num_pages}}">Last</a><!--전체페이지수(마지막)에 링크가걸려있는것-->
+    {% endif %}
+
+    </div>
+    {% endblock %}
 </body>
-{% endblock %}
+

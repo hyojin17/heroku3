@@ -1,12 +1,21 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.core.paginator import Paginator#페이지네이션을하기위해 임포트
 from .models import Blog
 #같은 폴더에 있는 models라는 파이썬 파일로부터 Blog클래스를 import
 
 
 def home(request):
     blogs = Blog.objects#blogs라는 변수에 객체목록을 저장 #쿼리셋
-    return render(request, 'home.html', {'blogs':blogs})#세번째 인자로 사전형객체로 blogs키값으로 blogs를 받는다.
+    #블로그 모든 글들을 대상으로
+    blog_list = Blog.objects.all()
+    #블로그 객체 세개를 한 페이지로 자르기
+    paginator = Paginator(blog_list, 3)
+    #request된 페이지가 뭔지를 알아내고(request페이지를 변수에 담아내고)
+    page = request.GET.get('page')#request된 페이지 번호가 이 page에 담긴것!
+    #request된 페이지를 얻어온 뒤 return 해준다.
+    posts = paginator.get_page(page)
+    return render(request, 'home.html', {'blogs':blogs, 'posts':posts})#세번째 인자로 사전형객체로 blogs키값으로 blogs를 받는다.
 
 def detail(request, blog_id):
 #home에 비해 인자를 하나 더 받는다.

@@ -25,6 +25,13 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'portfolio' %}">portfolio</a>
+                <a class="dropdown-item" href="{% url 'signup' %}">회원가입</a>
+                <a class="dropdown-item" href="{% url 'login' %}">로그인</a>
+                <!-- <a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a> -->
+                <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                <form id="logout" method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %} <input type="hidden" />
+                </form>
                 <!-- <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a> -->
