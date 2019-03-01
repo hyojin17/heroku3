@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block contents %}
-<body>
+<!-- <body>
 <br>
     <div class="container">
         <form action="{% url 'create'%}">
@@ -16,5 +16,17 @@
            <input class="btn btn-dark" type="submit" value="제출하기">
         </form>
     </div>
-</body>
+</body> -->
+
+<br>
+<div class = "container">
+    <form method="POST">
+        {% csrf_token%}
+        <table>
+            {{form.as_table}}<!--템플릿변수로작성, as~로 만든다. table로 만든다.-->
+        </table>
+        <br>
+        <input class="btn btn-dark" type="submit" value="제출하기">
+    </form>
+</div>
 {% endblock %}

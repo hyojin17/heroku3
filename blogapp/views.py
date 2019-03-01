@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core.paginator import Paginator#페이지네이션을하기위해 임포트
 from .models import Blog
 #같은 폴더에 있는 models라는 파이썬 파일로부터 Blog클래스를 import
+from .form import BlogPost
 
 
 def home(request):
@@ -37,6 +38,19 @@ def create(request):#입력받은 내용을 데이터베이스에 넣어주는 �
     return redirect('/blog/'+str(blog.id))#redirect(URL)은 이 위에 있는 것들을 다 처리하고 이 URL로 넘기세요 라는 뜻
     #str을 써준이유는 url은 항상 str인데, blog.id는 int형이기때문에 문자열로 형변환.
     #위에 있는 것이 다 처리되고, save로 데이터베이스에 저장되고, /blog/str(blog_id)로 곧장 이동이 된다.
-    
+
+def blogpost(request):
+    #1.입력된 내용을 처리하는 기능 -> POST
+    if request.method == 'POST':
+        form = BlogPost(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)#모델객체를 반환하된, 저장하지 않고 모델객체를 가져온다 이 post는 블로그형 객체
+            post.pub_date = timezone.now()#입력공간에서 입력받지 않았던 시각을 넣어준다.
+            post.save()
+            return redirect('home')
+    #2.빈페이지를 띄워주는 기능 -> GET
+    else:
+        form = BlogPost()
+        return render(request, 'new.html', {'form':form})
 
 
